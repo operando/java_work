@@ -86,4 +86,62 @@ if(bf.getLanguages() & BitF.RUBY > 0) {
 }
 ```
 
+## オプション定数
+
+* 整数オプション定数で連番にする場合、それを使用するメソッド等はMIN/MAXの範囲チェックをしたほうがよい
+ * しかし、途中連番がなくなったり、新しく定数を追加した際に修正が大変
+ * 解決策として定数オブジェクトまたはEnumを使用する
+
+## 定数オブジェクト
+
+* finalクラスのfinalインスタンスで定数を宣言する
+* それにより、範囲外(対象外)の定数定義を阻止する
+* 検索する際に、定数名で検索可能
+* 整数オプション定数と違い、定数追加/削除時にロジックに対する修正はいらない
+* 整数オプション定数ならコンパイル時に値に置き換えられる
+* オブジェクト定数の場合、プログラム実行時に多少のオーバーヘッドがある
+ * 数ミリ秒なら大きな問題にはならない
+* static finalなオブジェクト定数なら==比較可能
+
+```java
+public final class Test {
+    public static final Test NAME_JAVA = new Test("Java");
+    public static final Test NAME_RUBY = new Test("Ruby");
+    public static final Test NAME_PHP = new Test("PHP");
+
+    private final String name;
+
+    private Test(final String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class Language {
+    private Test test;
+
+    public void setTest(final Test test) {
+        // 対象外の定数は渡されない
+        this.test = test;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+}
+
+Language l = new Language();
+l.setTest(Test.NAME_JAVA);
+
+// メモリ比較可能。staticなのでセットした値と定数宣言されているメモリは同じはす
+if (l.getTest == Test.NAME_JAVA) {
+    
+}
+```
+
+
+
 
