@@ -1,0 +1,16 @@
+group 'java-10-sample'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+defaultTasks 'run'
+mainClassName = 'com.os.operando.sample.Main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
